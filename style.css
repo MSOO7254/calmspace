@@ -418,3 +418,76 @@ body.dark .history-item {
 .nav-signin:hover {
   background: #0F6E56;
 }
+/* =====================
+   RESPONSIVE / MOBILE
+   Adapts layout for smaller screens
+======================== */
+@media (max-width: 600px) {
+
+  header {
+    flex-wrap: wrap;
+    padding: 14px 20px;
+    gap: 10px;
+  }
+
+  .logo {
+    font-size: 18px;
+  }
+
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    width: 100%;
+  }
+
+  nav a {
+    margin-left: 0;
+    font-size: 13px;
+  }
+
+  .dark-toggle {
+    position: absolute;
+    top: 14px;
+    right: 20px;
+  }
+
+  .hero h1 {
+    font-size: 28px;
+  }
+
+  .hero p {
+    font-size: 14px;
+  }
+
+  .emotion-section h2 {
+    font-size: 18px;
+  }
+
+  .emotion-btn {
+    width: 100%;
+    text-align: left;
+  }
+
+  .response-box {
+    padding: 20px;
+    margin: 0 12px;
+  }
+
+  footer {
+    flex-direction: column;
+    text-align: center;
+    padding: 24px 20px;
+    gap: 16px;
+  }
+
+  .footer-links a {
+    margin-left: 10px;
+  }
+
+  .history-section {
+    padding: 30px 16px;
+  }
+
+}
