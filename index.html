@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CalmSpace</title>
+
+    <!-- This links your CSS file -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">CalmSpace</div>
+        <nav>
+            <a href="#">About</a>
+            <a href="#">Support</a>
+            <a href="#">Get Involved</a>
+        </nav>
+        <nav>
+            <a href="#">About</a>
+            <a href="#">Support</a>
+            <a href="#">Get Involved</a>
+        </nav>
+
+        <!-- Dark mode toggle -->
+        <button class="dark-toggle" id="darkToggle">🌙</button>
+    </header>
+
+    <!-- Daily Micro Moment -->
+    <div class="micro" id="microMoment"></div>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1>hi... are you smiling?</h1>
+        <p>No pressure. Just check in with yourself for a second.</p>
+    </section>
+
+    <!-- Emotion Selector -->
+    <section class="emotion-section">
+        <h2>how are you <em>actually</em> doing?</h2>
+        <p>pick your moment — no wrong answers here.</p>
+
+        <div class="emotion-grid">
+            <button class="emotion-btn" data-mood="work">😮‍💨 just got off a long shift</button>
+            <button class="emotion-btn" data-mood="grief">🖤 at a funeral or grieving</button>
+            <button class="emotion-btn" data-mood="birthday">🎉 it's my birthday!</button>
+            <button class="emotion-btn" data-mood="hospital">🏥 at the hospital</button>
+            <button class="emotion-btn" data-mood="argument">😤 just had an argument</button>
+            <button class="emotion-btn" data-mood="good">✨ actually having a good day</button>
+            <button class="emotion-btn" data-mood="cant_explain">🌫️ can't explain it</button>
+            <button class="emotion-btn" data-mood="tired">😴 just tired</button>
+        </div>
+
+        <!-- Response Box -->
+        <div class="response-box" id="responseBox">
+            <div class="emoji" id="responseEmoji"></div>
+            <h3 id="responseTitle"></h3>
+            <p id="responseText"></p>
+            <button class="reset-btn" id="resetBtn">clear my mood ↺</button>
+        </div>
+
+    </section>
+    <!-- Mood History -->
+    <section class="history-section">
+        <h2>your mood journey today</h2>
+        <div class="history-list" id="historyList">
+            <p class="history-empty">no moods recorded yet — pick one above 💚</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">CalmSpace</div>
+        <div class="footer-links">
+            <a href="#">Contact</a>
+            <a href="#">Privacy</a>
+            <a href="#">Instagram</a>
+        </div>
+        <p class="footer-copy">© 2026 CalmSpace. Made with care.</p>
+    </footer>
+
+    <!-- This links your JavaScript file — always at the bottom -->
+    <script src="script.js"></script>
+
+</body>
+
+</html>

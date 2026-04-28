@@ -1,0 +1,405 @@
+/* =====================
+   GENERAL RESET
+   Removes default browser spacing
+======================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* =====================
+   BODY
+   Base font, color, background
+======================== */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+  background: #e1f5ee;
+  transition: background 0.8s ease;
+}
+
+/* =====================
+   HEADER
+   Top navigation bar
+======================== */
+header {
+  background: white;
+  padding: 16px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1D9E75;
+}
+
+nav a {
+  margin-left: 24px;
+  text-decoration: none;
+  color: #555;
+  font-size: 14px;
+}
+
+nav a:hover {
+  color: #1D9E75;
+}
+
+/* =====================
+   MICRO MOMENT
+   Daily message bar
+======================== */
+.micro {
+  text-align: center;
+  padding: 14px 20px;
+  background: white;
+  font-size: 14px;
+  color: #888;
+  border-bottom: 1px solid #e0e0e0;
+  letter-spacing: 0.3px;
+}
+
+/* =====================
+   HERO SECTION
+   Main greeting area
+======================== */
+.hero {
+  text-align: center;
+  padding: 70px 20px 40px;
+}
+
+.hero h1 {
+  font-size: 38px;
+  font-weight: 700;
+  color: #1a2e26;
+  margin-bottom: 12px;
+}
+
+.hero p {
+  font-size: 16px;
+  color: #555;
+}
+
+/* =====================
+   EMOTION SECTION
+   Mood selector area
+======================== */
+.emotion-section {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.emotion-section h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #1a2e26;
+}
+
+.emotion-section p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 28px;
+}
+
+/* =====================
+   EMOTION BUTTONS
+   The mood picker pills
+======================== */
+.emotion-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  max-width: 640px;
+  margin: 0 auto 32px;
+}
+
+.emotion-btn {
+  background: white;
+  border: 1.5px solid #ccc;
+  padding: 12px 20px;
+  border-radius: 40px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #333;
+}
+
+.emotion-btn:hover {
+  border-color: #1D9E75;
+  color: #1D9E75;
+  transform: scale(1.05);
+}
+
+.emotion-btn.active {
+  background: #1D9E75;
+  color: white;
+  border-color: #1D9E75;
+  transform: scale(1.05);
+}
+
+/* =====================
+   RESPONSE BOX
+   Message that appears after mood selection
+======================== */
+.response-box {
+  max-width: 520px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 16px;
+  padding: 28px 32px;
+  font-size: 16px;
+  line-height: 1.7;
+  color: #333;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+
+  /* Hidden by default */
+  opacity: 0;
+  display: none;
+  transition: opacity 0.6s ease;
+}
+
+.response-box.visible {
+  display: block;
+  opacity: 1;
+}
+
+.response-box .emoji {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.response-box h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #1a2e26;
+}
+
+/* =====================
+   FOOTER
+   Bottom of the page
+======================== */
+footer {
+  background: #1a2e26;
+  padding: 28px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.footer-logo {
+  font-size: 16px;
+  color: #9FE1CB;
+  font-weight: 600;
+}
+
+.footer-links a {
+  margin-left: 20px;
+  font-size: 13px;
+  color: #5DCAA5;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: white;
+}
+
+.footer-copy {
+  font-size: 12px;
+  color: #5F5E5A;
+  width: 100%;
+  text-align: center;
+  margin-top: 8px;
+}
+/* =====================
+   DARK MODE TOGGLE BUTTON
+======================== */
+.dark-toggle {
+  background: none;
+  border: 1.5px solid #ccc;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dark-toggle:hover {
+  border-color: #1D9E75;
+}
+
+/* =====================
+   DARK MODE STYLES
+   Applied when body has class 'dark'
+======================== */
+body.dark {
+  background: #121212;
+  color: #e0e0e0;
+}
+
+body.dark header {
+  background: #1e1e1e;
+  border-bottom: 1px solid #333;
+}
+
+body.dark .logo {
+  color: #5DCAA5;
+}
+
+body.dark nav a {
+  color: #aaa;
+}
+
+body.dark nav a:hover {
+  color: #5DCAA5;
+}
+
+body.dark .micro {
+  background: #1e1e1e;
+  color: #777;
+  border-bottom: 1px solid #333;
+}
+
+body.dark .hero h1 {
+  color: #e0e0e0;
+}
+
+body.dark .hero p {
+  color: #aaa;
+}
+
+body.dark .emotion-section h2 {
+  color: #e0e0e0;
+}
+
+body.dark .emotion-section p {
+  color: #aaa;
+}
+
+body.dark .emotion-btn {
+  background: #1e1e1e;
+  border-color: #444;
+  color: #ccc;
+}
+
+body.dark .emotion-btn:hover {
+  border-color: #5DCAA5;
+  color: #5DCAA5;
+}
+
+body.dark .emotion-btn.active {
+  background: #1D9E75;
+  color: white;
+  border-color: #1D9E75;
+}
+
+body.dark .response-box {
+  background: #1e1e1e;
+  color: #e0e0e0;
+}
+
+body.dark .response-box h3 {
+  color: #9FE1CB;
+}
+
+body.dark footer {
+  background: #0d1a14;
+}
+/* =====================
+   RESET BUTTON
+   Clears the mood selection
+======================== */
+.reset-btn {
+  margin-top: 20px;
+  background: none;
+  border: 1.5px solid #ccc;
+  padding: 8px 20px;
+  border-radius: 40px;
+  font-size: 13px;
+  color: #888;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.reset-btn:hover {
+  border-color: #1D9E75;
+  color: #1D9E75;
+}
+
+body.dark .reset-btn {
+  border-color: #444;
+  color: #666;
+}
+
+body.dark .reset-btn:hover {
+  border-color: #5DCAA5;
+  color: #5DCAA5;
+}
+/* =====================
+   MOOD HISTORY
+   Shows moods selected this session
+======================== */
+.history-section {
+  text-align: center;
+  padding: 40px 20px;
+  background: white;
+}
+
+.history-section h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a2e26;
+  margin-bottom: 20px;
+}
+
+.history-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.history-empty {
+  font-size: 14px;
+  color: #aaa;
+}
+
+.history-item {
+  background: #f0f4f8;
+  border-radius: 40px;
+  padding: 8px 16px;
+  font-size: 13px;
+  color: #555;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.history-item span {
+  font-size: 11px;
+  color: #aaa;
+}
+
+body.dark .history-section {
+  background: #1e1e1e;
+}
+
+body.dark .history-section h2 {
+  color: #e0e0e0;
+}
+
+body.dark .history-item {
+  background: #2a2a2a;
+  color: #ccc;
+}
