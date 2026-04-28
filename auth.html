@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CalmSpace — Sign In</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .auth-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .auth-box {
+      background: white;
+      border-radius: 16px;
+      padding: 40px 36px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    .auth-logo {
+      font-size: 22px;
+      font-weight: 600;
+      color: #1D9E75;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .auth-tagline {
+      text-align: center;
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 32px;
+    }
+
+    .auth-tabs {
+      display: flex;
+      margin-bottom: 24px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .auth-tab {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+      font-size: 14px;
+      cursor: pointer;
+      color: #888;
+      border-bottom: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .auth-tab.active {
+      color: #1D9E75;
+      border-bottom: 2px solid #1D9E75;
+    }
+
+    .auth-form {
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .auth-form.active {
+      display: flex;
+    }
+
+    .auth-form input {
+      padding: 12px 16px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      transition: border 0.3s ease;
+      width: 100%;
+    }
+
+    .auth-form input:focus {
+      border-color: #1D9E75;
+    }
+
+    .auth-form button {
+      background: #1D9E75;
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .auth-form button:hover {
+      background: #0F6E56;
+    }
+
+    .auth-message {
+      text-align: center;
+      font-size: 13px;
+      margin-top: 8px;
+      min-height: 20px;
+    }
+
+    .auth-message.error {
+      color: #e24b4a;
+    }
+
+    .auth-message.success {
+      color: #1D9E75;
+    }
+
+    .consent-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 12px;
+      color: #888;
+      line-height: 1.5;
+    }
+
+    .consent-row input {
+      width: 16px;
+      height: 16px;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    body.dark .auth-box {
+      background: #1e1e1e;
+      color: #e0e0e0;
+    }
+
+    body.dark .auth-form input {
+      background: #2a2a2a;
+      border-color: #444;
+      color: #e0e0e0;
+    }
+
+    body.dark .auth-tabs {
+      border-bottom: 1px solid #333;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="auth-container">
+    <div class="auth-box">
+
+      <div class="auth-logo">CalmSpace</div>
+      <div class="auth-tagline">your safe space for support 🌿</div>
+
+      <!-- Tabs -->
+      <div class="auth-tabs">
+        <div class="auth-tab active" id="signinTab" onclick="switchTab('signin')">sign in</div>
+        <div class="auth-tab" id="signupTab" onclick="switchTab('signup')">create account</div>
+      </div>
+
+      <!-- Sign In Form -->
+      <div class="auth-form active" id="signinForm">
+        <input type="email" id="signinEmail" placeholder="your email" />
+        <input type="password" id="signinPassword" placeholder="your password" />
+        <button onclick="signIn()">sign in</button>
+        <div class="auth-message" id="signinMessage"></div>
+      </div>
+
+      <!-- Sign Up Form -->
+      <div class="auth-form" id="signupForm">
+        <input type="email" id="signupEmail" placeholder="your email" />
+        <input type="password" id="signupPassword" placeholder="create a password" />
+        <div class="consent-row">
+          <input type="checkbox" id="consentTick" />
+          <label for="consentTick">I agree that CalmSpace will store my mood data privately and securely. My data will
+            never be sold or shared with third parties.</label>
+        </div>
+        <button onclick="signUp()">create account</button>
+        <div class="auth-message" id="signupMessage"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCXHbUDVlTR36dyOzoLLlTXeHkBmfNWM3Y",
+      authDomain: "calmspace-8caec.firebaseapp.com",
+      projectId: "calmspace-8caec",
+      storageBucket: "calmspace-8caec.firebasestorage.app",
+      messagingSenderId: "369534892322",
+      appId: "1:369534892322:web:e4f9ca3caecc86dbc4cd7b"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Switch between sign in and sign up tabs
+    window.switchTab = function (tab) {
+      document.getElementById('signinForm').classList.remove('active');
+      document.getElementById('signupForm').classList.remove('active');
+      document.getElementById('signinTab').classList.remove('active');
+      document.getElementById('signupTab').classList.remove('active');
+
+      document.getElementById(tab + 'Form').classList.add('active');
+      document.getElementById(tab + 'Tab').classList.add('active');
+    }
+
+    // Sign Up
+    window.signUp = function () {
+      const email = document.getElementById('signupEmail').value;
+      const password = document.getElementById('signupPassword').value;
+      const consent = document.getElementById('consentTick').checked;
+      const message = document.getElementById('signupMessage');
+
+      if (!consent) {
+        message.textContent = 'please tick the consent box to continue.';
+        message.className = 'auth-message error';
+        return;
+      }
+
+      if (password.length < 6) {
+        message.textContent = 'password must be at least 6 characters.';
+        message.className = 'auth-message error';
+        return;
+      }
+
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(function () {
+          message.textContent = 'account created! welcome to CalmSpace 💚';
+          message.className = 'auth-message success';
+          setTimeout(function () {
+            window.location.href = 'index.html';
+          }, 1500);
+        })
+        .catch(function (error) {
+          message.textContent = error.message;
+          message.className = 'auth-message error';
+        });
+    }
+
+    // Sign In
+    window.signIn = function () {
+      const email = document.getElementById('signinEmail').value;
+      const password = document.getElementById('signinPassword').value;
+      const message = document.getElementById('signinMessage');
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then(function () {
+          message.textContent = 'welcome back 💚';
+          message.className = 'auth-message success';
+          setTimeout(function () {
+            window.location.href = 'index.html';
+          }, 1500);
+        })
+        .catch(function (error) {
+          message.textContent = error.message;
+          message.className = 'auth-message error';
+        });
+    }
+
+  </script>
+
+</body>
+
+</html>
