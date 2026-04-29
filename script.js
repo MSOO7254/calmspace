@@ -1,6 +1,28 @@
 // =====================
+// FIREBASE IMPORTS
+// =====================
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+// =====================
+// FIREBASE CONFIG
+// =====================
+const firebaseConfig = {
+  apiKey: "AIzaSyCXHbUDVlTR36dyOzoLLlTXeHkBmfNWM3Y",
+  authDomain: "calmspace-8caec.firebaseapp.com",
+  projectId: "calmspace-8caec",
+  storageBucket: "calmspace-8caec.firebasestorage.app",
+  messagingSenderId: "369534892322",
+  appId: "1:369534892322:web:e4f9ca3caecc86dbc4cd7b"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// =====================
 // DAILY MICRO MOMENT
-// Changes the top message based on the day
 // =====================
 const moments = [
   "you made it to today. that's genuinely impressive. 🌿",
@@ -11,12 +33,12 @@ const moments = [
   "small steps still count. you're moving. 🌱",
   "hey. take a breath. you've got this."
 ];
+
 const today = new Date().getDay();
 document.getElementById('microMoment').textContent = moments[today % moments.length];
 
 // =====================
 // TIME BASED GREETING
-// Changes hero heading based on time of day
 // =====================
 const hour = new Date().getHours();
 let greeting;
@@ -33,10 +55,8 @@ if (hour < 12) {
 
 document.querySelector('.hero h1').textContent = greeting;
 
-
 // =====================
 // MOOD DATA
-// Each mood has a background color, emoji, title and message
 // =====================
 const moods = {
   work: {
@@ -89,10 +109,42 @@ const moods = {
   }
 };
 
+// =====================
+// AUTH STATE
+// Shows user email and sign out button if logged in
+// =====================
+onAuthStateChanged(auth, function(user) {
+  const nav = document.querySelector('nav');
+  const existingUserInfo = document.getElementById('userInfo');
+  if (existingUserInfo) existingUserInfo.remove();
+
+  if (user) {
+    // User is signed in
+    const userInfo = document.createElement('span');
+    userInfo.id = 'userInfo';
+    userInfo.style.cssText = 'font-size: 13px; color: #888; display: flex; align-items: center; gap: 10px;';
+    userInfo.innerHTML = `
+      <span>👋 ${user.email}</span>
+      <button onclick="handleSignOut()" style="background: none; border: 1.5px solid #ccc; padding: 6px 14px; border-radius: 40px; font-size: 12px; cursor: pointer; color: #888;">sign out</button>
+    `;
+    nav.appendChild(userInfo);
+
+    // Load their mood history from Firebase
+    loadMoodHistory(user.uid);
+  }
+});
+
+// =====================
+// SIGN OUT
+// =====================
+window.handleSignOut = function() {
+  signOut(auth).then(function() {
+    window.location.reload();
+  });
+};
 
 // =====================
 // MOOD SELECTOR
-// Listens for button clicks and updates the page
 // =====================
 const buttons = document.querySelectorAll('.emotion-btn');
 const responseBox = document.getElementById('responseBox');
@@ -101,38 +153,29 @@ const responseTitle = document.getElementById('responseTitle');
 const responseText = document.getElementById('responseText');
 
 buttons.forEach(function(button) {
-
   button.addEventListener('click', function() {
-
-    // Get which mood was clicked
     const mood = button.getAttribute('data-mood');
     const selected = moods[mood];
 
-    // Change background color
+    // Change background
     document.body.style.background = selected.bg;
 
-    // Remove active class from all buttons
+    // Update active button
     buttons.forEach(function(btn) {
       btn.classList.remove('active');
     });
-
-    // Add active class to clicked button
-    
     button.classList.add('active');
 
-// Add to mood history
-addToHistory(mood, selected);
-
-    // Hide response box first for fade effect
+    // Hide response box first
     responseBox.classList.remove('visible');
     responseBox.style.display = 'none';
 
-    // Fill in the response content
+    // Fill response content
     responseEmoji.textContent = selected.emoji;
     responseTitle.textContent = selected.title;
     responseText.textContent = selected.text;
 
-    // Fade the response box back in
+    // Fade response box in
     setTimeout(function() {
       responseBox.style.display = 'block';
       setTimeout(function() {
@@ -140,12 +183,108 @@ addToHistory(mood, selected);
       }, 50);
     }, 300);
 
+    // Add to history
+    addToHistory(mood, selected);
+
+    // Save to Firebase if logged in
+    const user = auth.currentUser;
+    if (user) {
+      saveMoodToFirebase(user.uid, mood, selected);
+    }
+  });
+});
+
+// =====================
+// MOOD RESET
+// =====================
+document.getElementById('resetBtn').addEventListener('click', function() {
+  buttons.forEach(function(btn) {
+    btn.classList.remove('active');
   });
 
+  responseBox.classList.remove('visible');
+  setTimeout(function() {
+    responseBox.style.display = 'none';
+  }, 600);
+
+  document.body.style.background = '';
 });
+
+// =====================
+// SESSION MOOD HISTORY
+// Shows moods selected this session
+// =====================
+const historyList = document.getElementById('historyList');
+
+function addToHistory(mood, selected) {
+  const empty = historyList.querySelector('.history-empty');
+  if (empty) empty.remove();
+
+  const now = new Date();
+  const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+  const item = document.createElement('div');
+  item.classList.add('history-item');
+  item.innerHTML = `${selected.emoji} ${selected.title} <span>${time}</span>`;
+  historyList.appendChild(item);
+}
+
+// =====================
+// SAVE MOOD TO FIREBASE
+// Stores mood in Firestore under user's ID
+// =====================
+async function saveMoodToFirebase(uid, mood, selected) {
+  try {
+    await addDoc(collection(db, 'users', uid, 'moods'), {
+      mood: mood,
+      emoji: selected.emoji,
+      title: selected.title,
+      timestamp: new Date()
+    });
+  } catch (error) {
+    console.error('Error saving mood:', error);
+  }
+}
+
+// =====================
+// LOAD MOOD HISTORY FROM FIREBASE
+// Loads past moods when user signs in
+// =====================
+async function loadMoodHistory(uid) {
+  try {
+    const empty = historyList.querySelector('.history-empty');
+    if (empty) empty.remove();
+
+    const q = query(
+      collection(db, 'users', uid, 'moods'),
+      orderBy('timestamp', 'desc')
+    );
+
+    const snapshot = await getDocs(q);
+
+    snapshot.forEach(function(doc) {
+      const data = doc.data();
+      const date = data.timestamp.toDate();
+      const time = date.toLocaleDateString([], {
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+
+      const item = document.createElement('div');
+      item.classList.add('history-item');
+      item.innerHTML = `${data.emoji} ${data.title} <span>${time}</span>`;
+      historyList.appendChild(item);
+    });
+
+  } catch (error) {
+    console.error('Error loading mood history:', error);
+  }
+}
+
 // =====================
 // DARK MODE TOGGLE
-// Switches dark class on and off
 // =====================
 const darkToggle = document.getElementById('darkToggle');
 
@@ -158,52 +297,3 @@ darkToggle.addEventListener('click', function() {
     darkToggle.textContent = '🌙';
   }
 });
-// =====================
-// MOOD RESET
-// Clears everything back to default
-// =====================
-document.getElementById('resetBtn').addEventListener('click', function() {
-
-  // Remove active from all buttons
-  buttons.forEach(function(btn) {
-    btn.classList.remove('active');
-  });
-
-  // Fade out response box
-  responseBox.classList.remove('visible');
-  setTimeout(function() {
-    responseBox.style.display = 'none';
-  }, 600);
-
-  // Reset background
-  document.body.style.background = '';
-
-});
-// =====================
-// MOOD HISTORY
-// Records each mood selected this session
-// =====================
-const historyList = document.getElementById('historyList');
-const moodHistory = [];
-
-function addToHistory(mood, selected) {
-
-  // Remove empty message if first entry
-  const empty = historyList.querySelector('.history-empty');
-  if (empty) empty.remove();
-
-  // Get current time
-  const now = new Date();
-  const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-  // Add to history array
-  moodHistory.push({ mood, time });
-
-  // Create history item
-  const item = document.createElement('div');
-  item.classList.add('history-item');
-  item.innerHTML = `${selected.emoji} ${selected.title} <span>${time}</span>`;
-
-  // Add to history list
-  historyList.appendChild(item);
-}
