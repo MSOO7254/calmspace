@@ -526,63 +526,69 @@ function runParticles() {
   setInterval(draw, 20);
 }
 
-// ── Floating Clouds ──
+// ── Floating Clouds / Journal ──
 function runFloatingClouds() {
-  const clouds = Array.from({ length: 15 }, function() {
+  const particles = Array.from({ length: 50 }, function() {
     return {
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      size: Math.random() * 60 + 30,
-      speed: Math.random() * 0.3 + 0.1,
-      opacity: Math.random() * 0.15 + 0.05
+      size: Math.random() * 3 + 1,
+      speedX: (Math.random() - 0.5) * 0.4,
+      speedY: -Math.random() * 0.4 - 0.1,
+      opacity: Math.random() * 0.4 + 0.1,
+      color: ['#c4a882', '#a89070', '#d4b896', '#8b7355'][Math.floor(Math.random() * 4)]
+    };
+  });
+
+  // Ink drop ripples
+  const ripples = Array.from({ length: 8 }, function() {
+    return {
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      size: Math.random() * 20 + 10,
+      maxSize: Math.random() * 120 + 60,
+      speed: Math.random() * 0.5 + 0.2,
+      opacity: Math.random() * 0.12 + 0.04
     };
   });
 
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    clouds.forEach(function(c) {
-      ctx.beginPath();
-      ctx.arc(c.x, c.y, c.size, 0, Math.PI * 2);
-      ctx.fillStyle = '#ffffff';
-      ctx.globalAlpha = c.opacity;
-      ctx.fill();
-      c.x += c.speed;
-      if (c.x - c.size > canvas.width) {
-        c.x = -c.size;
-      }
-    });
-    ctx.globalAlpha = 1;
-  }
-  setInterval(draw, 30);
-}
 
-// ── Default Bubbles ──
-function runDefaultBubbles() {
-  const bubbles = Array.from({ length: 30 }, function() {
-    return {
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      size: Math.random() * 20 + 5,
-      speedY: Math.random() * 0.5 + 0.2,
-      opacity: Math.random() * 0.2 + 0.05
-    };
-  });
-
-  function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    bubbles.forEach(function(b) {
+    // Draw ripples
+    ripples.forEach(function(r) {
       ctx.beginPath();
-      ctx.arc(b.x, b.y, b.size, 0, Math.PI * 2);
-      ctx.strokeStyle = '#1D9E75';
-      ctx.globalAlpha = b.opacity;
+      ctx.arc(r.x, r.y, r.size, 0, Math.PI * 2);
+      ctx.strokeStyle = '#8b7355';
+      ctx.globalAlpha = r.opacity * (1 - r.size / r.maxSize);
+      ctx.lineWidth = 1;
       ctx.stroke();
-      b.y -= b.speedY;
-      if (b.y + b.size < 0) {
-        b.y = canvas.height + b.size;
-        b.x = Math.random() * canvas.width;
+      r.size += r.speed;
+      if (r.size > r.maxSize) {
+        r.size = 0;
+        r.x = Math.random() * canvas.width;
+        r.y = Math.random() * canvas.height;
       }
     });
+
+    // Draw floating dust particles
+    particles.forEach(function(p) {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = p.opacity;
+      ctx.fill();
+      p.x += p.speedX;
+      p.y += p.speedY;
+      if (p.y < -10) {
+        p.y = canvas.height + 10;
+        p.x = Math.random() * canvas.width;
+      }
+      if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+    });
+
     ctx.globalAlpha = 1;
+    ctx.lineWidth = 1;
   }
   setInterval(draw, 30);
 }

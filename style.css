@@ -589,17 +589,69 @@ body.dark .history-item {
   background: #e8789a;
   border-color: #e8789a;
 }
-
 [data-theme="poetic"] {
-  background: #f5f5f0 !important;
-  color: #444;
+  background: #e8e4d9 !important;
+  color: #3a3530;
   font-family: Georgia, serif;
+}
+
+[data-theme="poetic"] header {
+  background: #f0ece3;
+  border-bottom: 1px solid #d5cfc4;
+}
+
+[data-theme="poetic"] .logo {
+  color: #8b7355;
+  font-family: Georgia, serif;
+}
+
+[data-theme="poetic"] nav a {
+  color: #7a6e63;
+}
+
+[data-theme="poetic"] .micro {
+  background: #f0ece3;
+  color: #9a8e83;
+  border-bottom: 1px solid #d5cfc4;
 }
 
 [data-theme="poetic"] .hero h1 {
   font-family: Georgia, serif;
-  color: #555;
+  color: #3a3530;
+  font-weight: 400;
+  font-style: italic;
 }
+
+[data-theme="poetic"] .hero p {
+  color: #7a6e63;
+  font-family: Georgia, serif;
+}
+
+[data-theme="poetic"] .emotion-section h2 {
+  font-family: Georgia, serif;
+  color: #3a3530;
+  font-style: italic;
+}
+
+[data-theme="poetic"] .category-btn {
+  background: #f0ece3;
+  border-color: #d5cfc4;
+  color: #5a4e43;
+}
+
+[data-theme="poetic"] .category-btn:hover {
+  border-color: #8b7355;
+}
+
+[data-theme="poetic"] .response-box {
+  background: #f0ece3;
+  color: #3a3530;
+}
+
+[data-theme="poetic"] .history-section {
+  background: #f0ece3;
+}
+
 
 [data-theme="hype"] {
   background: #0d0d1a !important;
