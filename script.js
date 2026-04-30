@@ -371,3 +371,218 @@ darkToggle.addEventListener('click', function() {
     darkToggle.textContent = '🌙';
   }
 });
+// =====================
+// BACKGROUND ANIMATIONS
+// Different for each personality theme
+// =====================
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+window.addEventListener('resize', function() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+
+const currentTheme = document.body.getAttribute('data-theme') || 'default';
+
+if (currentTheme === 'hacker') {
+  runMatrixRain();
+} else if (currentTheme === 'soft') {
+  runFloatingPetals();
+} else if (currentTheme === 'nostalgic') {
+  runFireflies();
+} else if (currentTheme === 'hype') {
+  runParticles();
+} else if (currentTheme === 'poetic') {
+  runFloatingClouds();
+} else {
+  runDefaultBubbles();
+}
+
+// ── Matrix Rain ──
+function runMatrixRain() {
+  const chars = 'アイウエオカキクケコ0123456789ABCDEF<>{}[]|';
+  const fontSize = 14;
+  const columns = Math.floor(canvas.width / fontSize);
+  const drops = Array(columns).fill(1);
+
+  function draw() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#1D9E75';
+    ctx.font = fontSize + 'px monospace';
+
+    drops.forEach(function(y, i) {
+      const char = chars[Math.floor(Math.random() * chars.length)];
+      ctx.fillText(char, i * fontSize, y * fontSize);
+      if (y * fontSize > canvas.height && Math.random() > 0.975) {
+        drops[i] = 0;
+      }
+      drops[i]++;
+    });
+  }
+  setInterval(draw, 50);
+}
+
+// ── Floating Petals ──
+function runFloatingPetals() {
+  const petals = Array.from({ length: 40 }, function() {
+    return {
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      size: Math.random() * 8 + 4,
+      speedX: (Math.random() - 0.5) * 0.8,
+      speedY: Math.random() * 0.5 + 0.2,
+      opacity: Math.random() * 0.5 + 0.2,
+      color: ['#ffb7c5', '#ffc0cb', '#ffadb9', '#ff85a1'][Math.floor(Math.random() * 4)]
+    };
+  });
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    petals.forEach(function(p) {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = p.opacity;
+      ctx.fill();
+      p.x += p.speedX;
+      p.y += p.speedY;
+      if (p.y > canvas.height) {
+        p.y = -10;
+        p.x = Math.random() * canvas.width;
+      }
+    });
+    ctx.globalAlpha = 1;
+  }
+  setInterval(draw, 30);
+}
+
+// ── Fireflies ──
+function runFireflies() {
+  const fireflies = Array.from({ length: 60 }, function() {
+    return {
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      size: Math.random() * 3 + 1,
+      speedX: (Math.random() - 0.5) * 0.5,
+      speedY: (Math.random() - 0.5) * 0.5,
+      opacity: Math.random(),
+      opacityDir: (Math.random() - 0.5) * 0.02
+    };
+  });
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    fireflies.forEach(function(f) {
+      ctx.beginPath();
+      ctx.arc(f.x, f.y, f.size, 0, Math.PI * 2);
+      ctx.fillStyle = '#ffd700';
+      ctx.globalAlpha = Math.max(0, Math.min(1, f.opacity));
+      ctx.fill();
+      f.x += f.speedX;
+      f.y += f.speedY;
+      f.opacity += f.opacityDir;
+      if (f.opacity <= 0 || f.opacity >= 1) f.opacityDir *= -1;
+      if (f.x < 0 || f.x > canvas.width) f.speedX *= -1;
+      if (f.y < 0 || f.y > canvas.height) f.speedY *= -1;
+    });
+    ctx.globalAlpha = 1;
+  }
+  setInterval(draw, 30);
+}
+
+// ── Hype Particles ──
+function runParticles() {
+  const particles = Array.from({ length: 80 }, function() {
+    return {
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      size: Math.random() * 4 + 1,
+      speedX: (Math.random() - 0.5) * 3,
+      speedY: (Math.random() - 0.5) * 3,
+      color: ['#ffd700', '#ff6b6b', '#4ecdc4', '#fff'][Math.floor(Math.random() * 4)]
+    };
+  });
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(function(p) {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = 0.6;
+      ctx.fill();
+      p.x += p.speedX;
+      p.y += p.speedY;
+      if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+    });
+    ctx.globalAlpha = 1;
+  }
+  setInterval(draw, 20);
+}
+
+// ── Floating Clouds ──
+function runFloatingClouds() {
+  const clouds = Array.from({ length: 15 }, function() {
+    return {
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      size: Math.random() * 60 + 30,
+      speed: Math.random() * 0.3 + 0.1,
+      opacity: Math.random() * 0.15 + 0.05
+    };
+  });
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    clouds.forEach(function(c) {
+      ctx.beginPath();
+      ctx.arc(c.x, c.y, c.size, 0, Math.PI * 2);
+      ctx.fillStyle = '#ffffff';
+      ctx.globalAlpha = c.opacity;
+      ctx.fill();
+      c.x += c.speed;
+      if (c.x - c.size > canvas.width) {
+        c.x = -c.size;
+      }
+    });
+    ctx.globalAlpha = 1;
+  }
+  setInterval(draw, 30);
+}
+
+// ── Default Bubbles ──
+function runDefaultBubbles() {
+  const bubbles = Array.from({ length: 30 }, function() {
+    return {
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      size: Math.random() * 20 + 5,
+      speedY: Math.random() * 0.5 + 0.2,
+      opacity: Math.random() * 0.2 + 0.05
+    };
+  });
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    bubbles.forEach(function(b) {
+      ctx.beginPath();
+      ctx.arc(b.x, b.y, b.size, 0, Math.PI * 2);
+      ctx.strokeStyle = '#1D9E75';
+      ctx.globalAlpha = b.opacity;
+      ctx.stroke();
+      b.y -= b.speedY;
+      if (b.y + b.size < 0) {
+        b.y = canvas.height + b.size;
+        b.x = Math.random() * canvas.width;
+      }
+    });
+    ctx.globalAlpha = 1;
+  }
+  setInterval(draw, 30);
+}

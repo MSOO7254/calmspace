@@ -12,63 +12,75 @@
 
 <body>
 
-    <!-- Header -->
-    <header>
-        <div class="logo">CalmSpace</div>
-        <nav>
-            <a href="#">About</a>
-            <a href="#">Support</a>
-            <a href="#">Get Involved</a>
-            <a href="auth.html" class="nav-signin">Sign In</a>
-        </nav>
-        <!-- Dark mode toggle -->
-        <button class="dark-toggle" id="darkToggle">🌙</button>
-    </header>
+    <body>
+        <!-- Animated background canvas -->
+        <canvas id="bgCanvas"></canvas>
+        <!-- Header -->
+        <header>
+            <div class="logo">CalmSpace</div>
+            <nav>
+                <a href="#">About</a>
+                <a href="#">Support</a>
+                <a href="#">Get Involved</a>
+                <a href="auth.html" class="nav-signin">Sign In</a>
+            </nav>
+            <!-- Dark mode toggle -->
+            <button class="dark-toggle" id="darkToggle">🌙</button>
+        </header>
 
-    <!-- Daily Micro Moment -->
-    <div class="micro" id="microMoment"></div>
+        <!-- Daily Micro Moment -->
+        <div class="micro" id="microMoment"></div>
 
-    <!-- Hero -->
-    <section class="hero">
-        <h1>hi... are you smiling?</h1>
-        <p>No pressure. Just check in with yourself for a second.</p>
-    </section>
+        <!-- Hero -->
+        <section class="hero">
+            <h1>hi... are you smiling?</h1>
+            <p>No pressure. Just check in with yourself for a second.</p>
+        </section>
 
-    <!-- Emotion Selector -->
-    <section class="emotion-section">
-        <h2>how are you <em>actually</em> doing?</h2>
-        <p>pick your moment — no wrong answers here.</p>
+        <!-- Emotion Selector -->
+        <section class="emotion-section">
+            <h2>how are you <em>actually</em> doing?</h2>
+            <p>pick your moment — no wrong answers here.</p>
 
-        <!-- Step 1 — Categories -->
-        <div class="category-grid" id="categoryGrid">
-            <button class="category-btn" data-category="low" onclick="selectCategory('low', this)">
-                <span class="cat-emoji">😔</span>
-                <span class="cat-label">low energy</span>
-            </button>
-            <button class="category-btn" data-category="activated" onclick="selectCategory('activated', this)">
-                <span class="cat-emoji">😤</span>
-                <span class="cat-label">activated</span>
-            </button>
-            <button class="category-btn" data-category="positive" onclick="selectCategory('positive', this)">
-                <span class="cat-emoji">😊</span>
-                <span class="cat-label">positive</span>
-            </button>
-            <button class="category-btn" data-category="neutral" onclick="selectCategory('neutral', this)">
-                <span class="cat-emoji">😐</span>
-                <span class="cat-label">neutral / unclear</span>
-            </button>
-            <button class="category-btn" data-category="situational" onclick="selectCategory('situational', this)">
-                <span class="cat-emoji">🌍</span>
-                <span class="cat-label">situational</span>
-            </button>
-        </div>
+            <!-- Step 1 — Categories -->
+            <div class="category-grid" id="categoryGrid">
+                <button class="category-btn" data-category="low" onclick="selectCategory('low', this)">
+                    <span class="cat-emoji">😔</span>
+                    <span class="cat-label">low energy</span>
+                </button>
+                <button class="category-btn" data-category="activated" onclick="selectCategory('activated', this)">
+                    <span class="cat-emoji">😤</span>
+                    <span class="cat-label">activated</span>
+                </button>
+                <button class="category-btn" data-category="positive" onclick="selectCategory('positive', this)">
+                    <span class="cat-emoji">😊</span>
+                    <span class="cat-label">positive</span>
+                </button>
+                <button class="category-btn" data-category="neutral" onclick="selectCategory('neutral', this)">
+                    <span class="cat-emoji">😐</span>
+                    <span class="cat-label">neutral / unclear</span>
+                </button>
+                <button class="category-btn" data-category="situational" onclick="selectCategory('situational', this)">
+                    <span class="cat-emoji">🌍</span>
+                    <span class="cat-label">situational</span>
+                </button>
+            </div>
 
-        <!-- Step 2 — Specific Emotions -->
-        <div class="emotion-grid" id="emotionGrid" style="display:none;">
-            <p class="step-back" id="stepBack" onclick="goBack()">← back to categories</p>
-            <div class="emotion-buttons" id="emotionButtons"></div>
-        </div>
+            <!-- Step 2 — Specific Emotions -->
+            <div class="emotion-grid" id="emotionGrid" style="display:none;">
+                <p class="step-back" id="stepBack" onclick="goBack()">← back to categories</p>
+                <div class="emotion-buttons" id="emotionButtons"></div>
+            </div>
 
+            <!-- Response Box -->
+            <div class="response-box" id="responseBox">
+                <div class="emoji" id="responseEmoji"></div>
+                <h3 id="responseTitle"></h3>
+                <p id="responseText"></p>
+                <button class="reset-btn" id="resetBtn">clear my mood ↺</button>
+            </div>
+
+        </section>
         <!-- Response Box -->
         <div class="response-box" id="responseBox">
             <div class="emoji" id="responseEmoji"></div>
@@ -77,45 +89,36 @@
             <button class="reset-btn" id="resetBtn">clear my mood ↺</button>
         </div>
 
-    </section>
-    <!-- Response Box -->
-    <div class="response-box" id="responseBox">
-        <div class="emoji" id="responseEmoji"></div>
-        <h3 id="responseTitle"></h3>
-        <p id="responseText"></p>
-        <button class="reset-btn" id="resetBtn">clear my mood ↺</button>
-    </div>
+        </section>
+        <!-- Mood History -->
+        <section class="history-section">
+            <h2>your mood journey today</h2>
+            <div class="history-list" id="historyList">
+                <p class="history-empty">no moods recorded yet — pick one above 💚</p>
+            </div>
+        </section>
 
-    </section>
-    <!-- Mood History -->
-    <section class="history-section">
-        <h2>your mood journey today</h2>
-        <div class="history-list" id="historyList">
-            <p class="history-empty">no moods recorded yet — pick one above 💚</p>
-        </div>
-    </section>
+        <!-- Footer -->
+        <footer>
+            <div class="footer-logo">CalmSpace</div>
+            <div class="footer-links">
+                <a href="#">Contact</a>
+                <a href="#">Privacy</a>
+                <a href="#">Instagram</a>
+            </div>
+            <p class="footer-copy">© 2026 CalmSpace. Made with care.</p>
+        </footer>
 
-    <!-- Footer -->
-    <footer>
-        <div class="footer-logo">CalmSpace</div>
-        <div class="footer-links">
-            <a href="#">Contact</a>
-            <a href="#">Privacy</a>
-            <a href="#">Instagram</a>
-        </div>
-        <p class="footer-copy">© 2026 CalmSpace. Made with care.</p>
-    </footer>
+        <!-- This links your JavaScript file — always at the bottom -->
+        <!-- Read personality theme from onboarding -->
+        <script>
+            const theme = localStorage.getItem('calmspace_theme');
+            if (theme) {
+                document.body.setAttribute('data-theme', theme);
+            }
+        </script>
+        <script type="module" src="script.js"></script>
 
-    <!-- This links your JavaScript file — always at the bottom -->
-    <!-- Read personality theme from onboarding -->
-    <script>
-        const theme = localStorage.getItem('calmspace_theme');
-        if (theme) {
-            document.body.setAttribute('data-theme', theme);
-        }
-    </script>
-    <script type="module" src="script.js"></script>
-
-</body>
+    </body>
 
 </html>
