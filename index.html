@@ -39,15 +39,34 @@
         <h2>how are you <em>actually</em> doing?</h2>
         <p>pick your moment — no wrong answers here.</p>
 
-        <div class="emotion-grid">
-            <button class="emotion-btn" data-mood="work">😮‍💨 just got off a long shift</button>
-            <button class="emotion-btn" data-mood="grief">🖤 at a funeral or grieving</button>
-            <button class="emotion-btn" data-mood="birthday">🎉 it's my birthday!</button>
-            <button class="emotion-btn" data-mood="hospital">🏥 at the hospital</button>
-            <button class="emotion-btn" data-mood="argument">😤 just had an argument</button>
-            <button class="emotion-btn" data-mood="good">✨ actually having a good day</button>
-            <button class="emotion-btn" data-mood="cant_explain">🌫️ can't explain it</button>
-            <button class="emotion-btn" data-mood="tired">😴 just tired</button>
+        <!-- Step 1 — Categories -->
+        <div class="category-grid" id="categoryGrid">
+            <button class="category-btn" data-category="low" onclick="selectCategory('low', this)">
+                <span class="cat-emoji">😔</span>
+                <span class="cat-label">low energy</span>
+            </button>
+            <button class="category-btn" data-category="activated" onclick="selectCategory('activated', this)">
+                <span class="cat-emoji">😤</span>
+                <span class="cat-label">activated</span>
+            </button>
+            <button class="category-btn" data-category="positive" onclick="selectCategory('positive', this)">
+                <span class="cat-emoji">😊</span>
+                <span class="cat-label">positive</span>
+            </button>
+            <button class="category-btn" data-category="neutral" onclick="selectCategory('neutral', this)">
+                <span class="cat-emoji">😐</span>
+                <span class="cat-label">neutral / unclear</span>
+            </button>
+            <button class="category-btn" data-category="situational" onclick="selectCategory('situational', this)">
+                <span class="cat-emoji">🌍</span>
+                <span class="cat-label">situational</span>
+            </button>
+        </div>
+
+        <!-- Step 2 — Specific Emotions -->
+        <div class="emotion-grid" id="emotionGrid" style="display:none;">
+            <p class="step-back" id="stepBack" onclick="goBack()">← back to categories</p>
+            <div class="emotion-buttons" id="emotionButtons"></div>
         </div>
 
         <!-- Response Box -->
@@ -57,6 +76,15 @@
             <p id="responseText"></p>
             <button class="reset-btn" id="resetBtn">clear my mood ↺</button>
         </div>
+
+    </section>
+    <!-- Response Box -->
+    <div class="response-box" id="responseBox">
+        <div class="emoji" id="responseEmoji"></div>
+        <h3 id="responseTitle"></h3>
+        <p id="responseText"></p>
+        <button class="reset-btn" id="resetBtn">clear my mood ↺</button>
+    </div>
 
     </section>
     <!-- Mood History -->

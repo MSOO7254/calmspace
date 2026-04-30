@@ -56,58 +56,141 @@ if (hour < 12) {
 document.querySelector('.hero h1').textContent = greeting;
 
 // =====================
-// MOOD DATA
+// EMOTION CATEGORIES
 // =====================
-const moods = {
-  work: {
-    emoji: '😮‍💨',
-    title: 'okay. breathe. you made it through.',
-    text: 'Long shifts take more than just your time — they take your energy, your patience, your whole self. You showed up today. That counts for a lot. Rest is not laziness. It\'s recovery.',
-    bg: '#e8e5ff'
+const categories = {
+  low: {
+    label: 'low energy',
+    emotions: [
+      { id: 'lonely', emoji: '🫂', title: 'feeling lonely', text: 'Loneliness is one of the heaviest feelings. You can be in a room full of people and still feel completely alone. That\'s real. You don\'t have to pretend otherwise. We\'re here.', bg: '#dce6f0' },
+      { id: 'empty', emoji: '🌫️', title: 'feeling empty', text: 'Empty is different from sad. It\'s the absence of feeling. Like someone turned the volume down on everything. Rest in it for now. It won\'t stay forever.', bg: '#e8e8e8' },
+      { id: 'heartbroken', emoji: '💔', title: 'heartbroken', text: 'Heartbreak is a physical thing. It lives in your chest, your stomach, your throat. There\'s no shortcut through it. Only through it. We\'re walking with you.', bg: '#fde8e8' },
+      { id: 'exhausted', emoji: '😮‍💨', title: 'completely exhausted', text: 'Not just tired — exhausted. The kind that sleep doesn\'t always fix. You\'ve been carrying a lot. Put it down for a moment. Just breathe.', bg: '#e8e5ff' },
+      { id: 'numb', emoji: '🧊', title: 'feeling numb', text: 'Numb is your mind\'s way of protecting you when things get too heavy. It\'s okay. You don\'t have to feel everything right now. Be gentle with yourself.', bg: '#ddeeff' },
+      { id: 'sad', emoji: '😢', title: 'just sad', text: 'Sad is valid. You don\'t need a reason big enough to justify it. You\'re allowed to be sad. Sit with it. Let it move through you.', bg: '#dce6f0' }
+    ]
   },
-  grief: {
-    emoji: '🖤',
-    title: 'grief is love with nowhere to go.',
-    text: 'There\'s no right way to do this. No timeline, no rules. You don\'t have to be okay right now. We\'re just here, sitting with you in it.',
-    bg: '#dce6f0'
+  activated: {
+    label: 'activated',
+    emotions: [
+      { id: 'angry', emoji: '😠', title: 'angry', text: 'Anger is information. It\'s telling you something matters, something was crossed, something wasn\'t right. Feel it. Then decide what to do with it.', bg: '#ffddd5' },
+      { id: 'frustrated', emoji: '😤', title: 'frustrated', text: 'Frustration is anger\'s quieter cousin — and somehow harder to shake. Things aren\'t going the way they should. That\'s allowed to bother you.', bg: '#ffe8d5' },
+      { id: 'anxious', emoji: '😰', title: 'anxious', text: 'Anxiety is your brain trying to protect you from every possible outcome at once. Take one breath. You only have to handle right now. Not all of it.', bg: '#fef9c3' },
+      { id: 'overwhelmed', emoji: '🌊', title: 'overwhelmed', text: 'Too much, all at once. Everything feels urgent and nothing feels manageable. Pick one thing. Just one. Leave the rest for later.', bg: '#dce6f0' },
+      { id: 'restless', emoji: '⚡', title: 'restless', text: 'Can\'t sit still. Can\'t settle. Something in you is searching for something but you\'re not sure what. That energy is telling you something. Listen to it.', bg: '#fff9c3' },
+      { id: 'stressed', emoji: '😓', title: 'stressed', text: 'Stress means you care. But caring too much for too long wears you down. You\'re allowed to step back. The world won\'t fall apart in five minutes.', bg: '#ffddd5' }
+    ]
   },
-  birthday: {
-    emoji: '🎉',
-    title: 'hey — happy you exist!',
-    text: 'Birthdays can be complicated. But whatever this one looks like for you — we hope there\'s at least one small moment today that feels like yours. You deserve to be celebrated.',
-    bg: '#fff9c4'
+  positive: {
+    label: 'positive',
+    emotions: [
+      { id: 'grateful', emoji: '🙏', title: 'feeling grateful', text: 'Gratitude is one of the most powerful things a human can feel. Hold onto this moment. Notice what\'s good right now. You deserve to feel this.', bg: '#fefce8' },
+      { id: 'excited', emoji: '🎉', title: 'excited', text: 'Something good is happening or coming. Let yourself be excited. You don\'t have to play it cool. Be fully in it.', bg: '#fff9c4' },
+      { id: 'proud', emoji: '✨', title: 'feeling proud', text: 'You did something. Maybe big, maybe small — but you did it. Own that. Pride in yourself is not arrogance. It\'s recognition. You earned this.', bg: '#fefce8' },
+      { id: 'peaceful', emoji: '🌿', title: 'feeling peaceful', text: 'These moments are rare. Quiet, calm, settled. Notice it. Breathe it in. You don\'t have to do anything with peace except feel it.', bg: '#e1f5ee' },
+      { id: 'loved', emoji: '💚', title: 'feeling loved', text: 'Someone loves you. Or you love someone. Or both. That\'s everything. Hold onto that feeling — it\'s one of the best ones there is.', bg: '#e1f5ee' },
+      { id: 'hopeful', emoji: '🌅', title: 'feeling hopeful', text: 'Hope is brave. It means you believe things can be better. That takes courage. Don\'t let anyone talk you out of it.', bg: '#fef9c3' }
+    ]
   },
-  hospital: {
-    emoji: '🏥',
-    title: 'hospitals are a lot. you\'re handling it.',
-    text: 'Whether it\'s you, someone you love, or something in between — this is hard. You\'re allowed to feel scared, bored, hopeful, or all of those at once. We\'re rooting for you.',
-    bg: '#d8f0da'
+  neutral: {
+    label: 'neutral / unclear',
+    emotions: [
+      { id: 'bored', emoji: '😑', title: 'just bored', text: 'Boredom is underrated. It means your mind has space. Sometimes that space is uncomfortable. But creativity lives right on the other side of boredom.', bg: '#f0f4f8' },
+      { id: 'confused', emoji: '🤔', title: 'confused', text: 'Things aren\'t making sense right now. That\'s okay. Confusion is just the space before clarity. You don\'t have to have it figured out today.', bg: '#e8e5ff' },
+      { id: 'cant_explain', emoji: '🌫️', title: 'can\'t explain it', text: 'Sometimes feelings don\'t come with labels and that\'s completely okay. You\'re still allowed to feel it. We\'re not going anywhere.', bg: '#ede8ff' },
+      { id: 'existing', emoji: '🌙', title: 'just existing', text: 'Not good, not bad. Just here. That\'s enough. Existing is enough. You don\'t have to be thriving every day.', bg: '#ddeeff' },
+      { id: 'nostalgic', emoji: '📷', title: 'nostalgic', text: 'Missing something — a time, a person, a feeling. Nostalgia is love for the past. It\'s beautiful and painful at the same time. Let yourself remember.', bg: '#fff9c4' },
+      { id: 'disconnected', emoji: '🔌', title: 'feeling disconnected', text: 'Like you\'re watching life through glass. Present but not really here. That feeling is valid. You don\'t have to force connection. It comes back.', bg: '#e8e8e8' }
+    ]
   },
-  argument: {
-    emoji: '😤',
-    title: 'it\'s okay to still feel heated.',
-    text: 'Arguments leave a residue. Your feelings are valid even if the moment has passed. Take your time. You don\'t have to resolve everything right now.',
-    bg: '#ffddd5'
-  },
-  good: {
-    emoji: '✨',
-    title: 'yes! hold onto this one.',
-    text: 'Good days are real and they matter. Notice what made today feel a little lighter — even if it\'s something tiny. You deserve this.',
-    bg: '#fefce8'
-  },
-  cant_explain: {
-    emoji: '🌫️',
-    title: 'you don\'t have to name it.',
-    text: 'Sometimes feelings don\'t come with labels and that\'s completely okay. You\'re still allowed to feel it. We\'re not going anywhere.',
-    bg: '#ede8ff'
-  },
-  tired: {
-    emoji: '😴',
-    title: 'tired is valid. rest is radical.',
-    text: 'Not every tired is fixed by sleep. Sometimes you\'re tired of trying, of keeping up, of everything. That\'s real. Be gentle with yourself today.',
-    bg: '#ddeeff'
+  situational: {
+    label: 'situational',
+    emotions: [
+      { id: 'work', emoji: '😮‍💨', title: 'just got off a long shift', text: 'Long shifts take more than just your time — they take your energy, your patience, your whole self. You showed up today. That counts for a lot. Rest is not laziness. It\'s recovery.', bg: '#e8e5ff' },
+      { id: 'grief', emoji: '🖤', title: 'grieving', text: 'There\'s no right way to do this. No timeline, no rules. You don\'t have to be okay right now. We\'re just here, sitting with you in it.', bg: '#dce6f0' },
+      { id: 'birthday', emoji: '🎉', title: 'it\'s my birthday!', text: 'Birthdays can be complicated. But whatever this one looks like for you — we hope there\'s at least one small moment today that feels like yours. You deserve to be celebrated.', bg: '#fff9c4' },
+      { id: 'hospital', emoji: '🏥', title: 'at the hospital', text: 'Whether it\'s you, someone you love, or something in between — this is hard. You\'re allowed to feel scared, bored, hopeful, or all of those at once. We\'re rooting for you.', bg: '#d8f0da' },
+      { id: 'argument', emoji: '😤', title: 'after an argument', text: 'Arguments leave a residue. Your feelings are valid even if the moment has passed. Take your time. You don\'t have to resolve everything right now.', bg: '#ffddd5' },
+      { id: 'good_day', emoji: '✨', title: 'actually having a good day', text: 'Good days are real and they matter. Notice what made today feel a little lighter — even if it\'s something tiny. You deserve this.', bg: '#fefce8' }
+    ]
   }
 };
+
+// =====================
+// CATEGORY SELECTOR
+// =====================
+function selectCategory(categoryId, btn) {
+  // Update active category button
+  document.querySelectorAll('.category-btn').forEach(function(b) {
+    b.classList.remove('active');
+  });
+  btn.classList.add('active');
+
+  // Get emotions for this category
+  const category = categories[categoryId];
+  const emotionButtons = document.getElementById('emotionButtons');
+  emotionButtons.innerHTML = '';
+
+  // Build emotion buttons
+  category.emotions.forEach(function(emotion) {
+    const button = document.createElement('button');
+    button.className = 'emotion-btn';
+    button.setAttribute('data-mood', emotion.id);
+    button.setAttribute('data-category', categoryId);
+    button.innerHTML = emotion.emoji + ' ' + emotion.title;
+    button.addEventListener('click', function() {
+      selectMood(emotion);
+      addToHistory(emotion);
+      const user = auth.currentUser;
+      if (user) {
+        saveMoodToFirebase(user.uid, emotion.id, emotion);
+      }
+    });
+    emotionButtons.appendChild(button);
+  });
+
+  // Show emotion grid
+  document.getElementById('categoryGrid').style.display = 'none';
+  document.getElementById('emotionGrid').style.display = 'block';
+}
+
+function goBack() {
+  document.getElementById('categoryGrid').style.display = 'flex';
+  document.getElementById('emotionGrid').style.display = 'none';
+  document.getElementById('responseBox').classList.remove('visible');
+  setTimeout(function() {
+    document.getElementById('responseBox').style.display = 'none';
+  }, 600);
+  document.body.style.background = '';
+}
+
+function selectMood(emotion) {
+  // Change background
+  document.body.style.background = emotion.bg;
+
+  // Update active button
+  document.querySelectorAll('.emotion-btn').forEach(function(btn) {
+    btn.classList.remove('active');
+  });
+
+  // Hide response box first
+  const responseBox = document.getElementById('responseBox');
+  responseBox.classList.remove('visible');
+  responseBox.style.display = 'none';
+
+  // Fill response content
+  document.getElementById('responseEmoji').textContent = emotion.emoji;
+  document.getElementById('responseTitle').textContent = emotion.title;
+  document.getElementById('responseText').textContent = emotion.text;
+
+  // Fade response box in
+  setTimeout(function() {
+    responseBox.style.display = 'block';
+    setTimeout(function() {
+      responseBox.classList.add('visible');
+    }, 50);
+  }, 300);
+}
 
 // =====================
 // AUTH STATE
@@ -198,16 +281,7 @@ buttons.forEach(function(button) {
 // MOOD RESET
 // =====================
 document.getElementById('resetBtn').addEventListener('click', function() {
-  buttons.forEach(function(btn) {
-    btn.classList.remove('active');
-  });
-
-  responseBox.classList.remove('visible');
-  setTimeout(function() {
-    responseBox.style.display = 'none';
-  }, 600);
-
-  document.body.style.background = '';
+  goBack();
 });
 
 // =====================
