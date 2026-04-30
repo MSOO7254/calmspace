@@ -191,18 +191,28 @@ function selectMood(emotion) {
     }, 50);
   }, 300);
 }
-
 // =====================
 // AUTH STATE
-// Shows user email and sign out button if logged in
 // =====================
-onAuthStateChanged(auth, function(user) {
+import { getFirestore, collection, addDoc, getDocs, query, orderBy, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+onAuthStateChanged(auth, async function(user) {
   const nav = document.querySelector('nav');
   const existingUserInfo = document.getElementById('userInfo');
   if (existingUserInfo) existingUserInfo.remove();
 
   if (user) {
-    // User is signed in
+    // Load saved theme from Firebase
+    const userDoc = await getDoc(doc(db, 'users', user.uid));
+    if (userDoc.exists()) {
+      const savedTheme = userDoc.data().theme;
+      if (savedTheme) {
+        document.body.setAttribute('data-theme', savedTheme);
+        localStorage.setItem('calmspace_theme', savedTheme);
+      }
+    }
+
+    // Show user info in nav
     const userInfo = document.createElement('span');
     userInfo.id = 'userInfo';
     userInfo.style.cssText = 'font-size: 13px; color: #888; display: flex; align-items: center; gap: 10px;';
@@ -212,11 +222,10 @@ onAuthStateChanged(auth, function(user) {
     `;
     nav.appendChild(userInfo);
 
-    // Load their mood history from Firebase
+    // Load mood history
     loadMoodHistory(user.uid);
   }
 });
-
 // =====================
 // SIGN OUT
 // =====================

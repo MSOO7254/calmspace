@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -54,8 +55,15 @@
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .step-label {
@@ -192,6 +200,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <div class="quiz-container">
@@ -366,7 +375,7 @@
     function selectOption(btn, questionId) {
       // Remove selected from all options in this question
       const options = document.querySelectorAll('#' + questionId + ' .option-btn');
-      options.forEach(function(opt) {
+      options.forEach(function (opt) {
         opt.classList.remove('selected');
       });
 
@@ -396,27 +405,56 @@
     }
 
     function showResult() {
-      // Hide last question
       document.getElementById('q5').classList.remove('active');
 
-      // Get personality based on aesthetic choice
       const aesthetic = answers['q1'] || 'soft';
       const profile = profiles[aesthetic];
 
-      // Update background
       document.body.style.background = profile.bg;
 
-      // Fill result screen
       document.getElementById('resultEmoji').textContent = profile.emoji;
       document.getElementById('resultTitle').textContent = profile.title;
       document.getElementById('resultDesc').textContent = profile.desc;
 
-      // Show result
       document.getElementById('resultScreen').classList.add('active');
 
-      // Save to localStorage for now
       localStorage.setItem('calmspace_theme', profile.theme);
       localStorage.setItem('calmspace_answers', JSON.stringify(answers));
+
+      // Save theme to Firebase
+      saveThemeToFirebase(profile.theme);
+    }
+
+    async function saveThemeToFirebase(theme) {
+      try {
+        const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js");
+        const { getAuth } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js");
+        const { getFirestore, doc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyCXHbUDVlTR36dyOzoLLlTXeHkBmfNWM3Y",
+          authDomain: "calmspace-8caec.firebaseapp.com",
+          projectId: "calmspace-8caec",
+          storageBucket: "calmspace-8caec.firebasestorage.app",
+          messagingSenderId: "369534892322",
+          appId: "1:369534892322:web:e4f9ca3caecc86dbc4cd7b"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const user = auth.currentUser;
+
+        if (user) {
+          await setDoc(doc(db, 'users', user.uid), {
+            theme: theme,
+            answers: JSON.parse(localStorage.getItem('calmspace_answers') || '{}'),
+            updatedAt: new Date()
+          }, { merge: true });
+        }
+      } catch (error) {
+        console.error('Error saving theme:', error);
+      }
     }
 
     function enterCalmSpace() {
@@ -425,4 +463,5 @@
   </script>
 
 </body>
+
 </html>
