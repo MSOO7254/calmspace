@@ -119,7 +119,7 @@ const categories = {
 // =====================
 // CATEGORY SELECTOR
 // =====================
-function selectCategory(categoryId, btn) {
+window.selectCategory = function(categoryId, btn) {
   // Update active category button
   document.querySelectorAll('.category-btn').forEach(function(b) {
     b.classList.remove('active');
@@ -154,7 +154,7 @@ function selectCategory(categoryId, btn) {
   document.getElementById('emotionGrid').style.display = 'block';
 }
 
-function goBack() {
+window.goBack = function() {
   document.getElementById('categoryGrid').style.display = 'flex';
   document.getElementById('emotionGrid').style.display = 'none';
   document.getElementById('responseBox').classList.remove('visible');
