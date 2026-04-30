@@ -491,3 +491,166 @@ body.dark .history-item {
   }
 
 }
+/* =====================
+   PERSONALITY THEMES
+   Applied based on onboarding quiz
+======================== */
+[data-theme="hacker"] {
+  background: #0d0d0d !important;
+  color: #e0e0e0;
+  font-family: 'Courier New', monospace;
+}
+
+[data-theme="hacker"] header {
+  background: #1a1a1a;
+  border-bottom: 1px solid #333;
+}
+
+[data-theme="hacker"] .logo {
+  color: #1D9E75;
+  font-family: 'Courier New', monospace;
+}
+
+[data-theme="hacker"] nav a {
+  color: #888;
+}
+
+[data-theme="hacker"] .micro {
+  background: #1a1a1a;
+  color: #555;
+  border-bottom: 1px solid #333;
+}
+
+[data-theme="hacker"] .hero h1 {
+  color: #e0e0e0;
+  font-family: 'Courier New', monospace;
+}
+
+[data-theme="hacker"] .hero p {
+  color: #888;
+}
+
+[data-theme="hacker"] .emotion-section h2 {
+  color: #e0e0e0;
+}
+
+[data-theme="hacker"] .emotion-btn {
+  background: #1a1a1a;
+  border-color: #333;
+  color: #aaa;
+}
+
+[data-theme="hacker"] .emotion-btn:hover {
+  border-color: #1D9E75;
+  color: #1D9E75;
+}
+
+[data-theme="hacker"] .response-box {
+  background: #1a1a1a;
+  color: #e0e0e0;
+}
+
+[data-theme="hacker"] .response-box h3 {
+  color: #1D9E75;
+  font-family: 'Courier New', monospace;
+}
+
+[data-theme="hacker"] .history-section {
+  background: #111;
+}
+
+[data-theme="hacker"] .history-section h2 {
+  color: #e0e0e0;
+}
+
+[data-theme="hacker"] .history-item {
+  background: #1a1a1a;
+  color: #aaa;
+}
+
+[data-theme="soft"] {
+  background: #fff0f5 !important;
+  color: #333;
+}
+
+[data-theme="soft"] header {
+  background: #fff5f8;
+}
+
+[data-theme="soft"] .logo {
+  color: #e8789a;
+}
+
+[data-theme="soft"] .hero h1 {
+  color: #c45c7a;
+}
+
+[data-theme="soft"] .emotion-btn.active {
+  background: #e8789a;
+  border-color: #e8789a;
+}
+
+[data-theme="poetic"] {
+  background: #f5f5f0 !important;
+  color: #444;
+  font-family: Georgia, serif;
+}
+
+[data-theme="poetic"] .hero h1 {
+  font-family: Georgia, serif;
+  color: #555;
+}
+
+[data-theme="hype"] {
+  background: #0d0d1a !important;
+  color: #fff;
+}
+
+[data-theme="hype"] header {
+  background: #1a1a2e;
+}
+
+[data-theme="hype"] .logo {
+  color: #ffd700;
+}
+
+[data-theme="hype"] .hero h1 {
+  color: #ffd700;
+  font-weight: 800;
+}
+
+[data-theme="hype"] .emotion-btn.active {
+  background: #ffd700;
+  border-color: #ffd700;
+  color: #000;
+}
+
+[data-theme="nostalgic"] {
+  background: #1a1208 !important;
+  color: #e8d5b0;
+}
+
+[data-theme="nostalgic"] header {
+  background: #2a1f0e;
+  border-bottom: 1px solid #3a2f1e;
+}
+
+[data-theme="nostalgic"] .logo {
+  color: #d4a855;
+}
+
+[data-theme="nostalgic"] .hero h1 {
+  color: #e8d5b0;
+}
+
+[data-theme="nostalgic"] .emotion-btn {
+  background: #2a1f0e;
+  border-color: #3a2f1e;
+  color: #c4a875;
+}
+
+[data-theme="nostalgic"] .emotion-btn.active {
+  background: #d4a855;
+  border-color: #d4a855;
+  color: #1a1208;
+}

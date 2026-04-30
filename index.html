@@ -79,6 +79,13 @@
     </footer>
 
     <!-- This links your JavaScript file — always at the bottom -->
+    <!-- Read personality theme from onboarding -->
+    <script>
+        const theme = localStorage.getItem('calmspace_theme');
+        if (theme) {
+            document.body.setAttribute('data-theme', theme);
+        }
+    </script>
     <script type="module" src="script.js"></script>
 
 </body>
