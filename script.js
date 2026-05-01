@@ -337,6 +337,12 @@ async function saveMoodToFirebase(uid, mood, selected) {
     console.error('Error saving mood:', error);
   }
 }
+// Save to Firebase if logged in
+const user = auth.currentUser;
+if (user) {
+  saveMoodToFirebase(user.uid, emotion.id, emotion);
+  updateStreak(user.uid);
+}
 
 // =====================
 // LOAD MOOD HISTORY FROM FIREBASE
@@ -373,6 +379,83 @@ async function loadMoodHistory(uid) {
   } catch (error) {
     console.error('Error loading mood history:', error);
   }
+}
+// =====================
+// STREAK TRACKER
+// Tracks daily check in streak
+// =====================
+async function updateStreak(uid) {
+  try {
+    const userRef = doc(db, 'users', uid);
+    const userDoc = await getDoc(userRef);
+
+    const today = new Date().toDateString();
+    let streak = 1;
+    let lastCheckin = null;
+
+    if (userDoc.exists()) {
+      const data = userDoc.data();
+      lastCheckin = data.lastCheckin;
+      streak = data.streak || 1;
+
+      if (lastCheckin === today) {
+        // Already checked in today
+        document.getElementById('streakCount').textContent = streak;
+        return;
+      }
+
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yesterdayString = yesterday.toDateString();
+
+      if (lastCheckin === yesterdayString) {
+        // Checked in yesterday — increase streak
+        streak = streak + 1;
+      } else {
+        // Missed a day — reset streak
+        streak = 1;
+      }
+    }
+
+    // Save updated streak
+    await setDoc(userRef, {
+      streak: streak,
+      lastCheckin: today
+    }, { merge: true });
+
+    // Update UI
+    document.getElementById('streakCount').textContent = streak;
+
+    // Celebrate milestones
+    if (streak === 3) showStreakMessage('3 days in a row!! you\'re building something. 🌱');
+    if (streak === 7) showStreakMessage('a whole week!! that\'s dedication. 🔥');
+    if (streak === 30) showStreakMessage('30 days. you\'re unstoppable. 💚');
+
+  } catch (error) {
+    console.error('Error updating streak:', error);
+  }
+}
+
+function showStreakMessage(message) {
+  const box = document.createElement('div');
+  box.style.cssText = `
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1D9E75;
+    color: white;
+    padding: 14px 28px;
+    border-radius: 40px;
+    font-size: 14px;
+    z-index: 999;
+    animation: fadeIn 0.5s ease;
+  `;
+  box.textContent = message;
+  document.body.appendChild(box);
+  setTimeout(function() {
+    box.remove();
+  }, 4000);
 }
 
 // =====================
