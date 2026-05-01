@@ -273,8 +273,19 @@ buttons.forEach(function(button) {
       }, 50);
     }, 300);
 
-    // Add to history
-    addToHistory(mood, selected);
+   function addToHistory(emotion) {
+  const historyList = document.getElementById('historyList');
+  const empty = historyList.querySelector('.history-empty');
+  if (empty) empty.remove();
+
+  const now = new Date();
+  const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+  const item = document.createElement('div');
+  item.classList.add('history-item');
+  item.innerHTML = `${emotion.emoji} ${emotion.title} <span>${time}</span>`;
+  historyList.appendChild(item);
+}
 
     // Save to Firebase if logged in
     const user = auth.currentUser;
