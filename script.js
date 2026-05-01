@@ -222,6 +222,7 @@ onAuthStateChanged(auth, async function(user) {
 
     // Load mood history
     loadMoodHistory(user.uid);
+    updateStreak(user.uid);
   }
 });
 // =====================
